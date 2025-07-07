@@ -1,0 +1,57 @@
+import express, { Express, Request, Response } from "express";
+import mongoose from "mongoose";
+import * as dotenv from "dotenv";
+import { addRoutes } from "./src/config/routes.config";
+import cors, { CorsOptions } from "cors";
+import { responseFormatter } from "./src/middleware/responseFormatter";
+
+const app: Express = express();
+// if (!process.env.PORT) {
+//     throw new Error("Can not read evironment variable");
+//     process.exit(1);
+// }
+// const port = process.env.PORT;
+
+// let corsOptions: CorsOptions = {
+//     origin: "htt://example.com",
+// };
+
+dotenv.config();
+
+app.use(cors());
+
+app.use(express.json());
+
+app.use(responseFormatter);
+
+app.get("/", (req: Request, res: Response) => {
+    res.send("Express + TypeScript Server");
+});
+
+addRoutes(app);
+
+async function bootstrap() {
+    if (!process.env.DATABASE_CONNECTION_STRING || !process.env.DATABASE_NAME || !process.env.PORT) {
+        throw new Error("Can not read evironment variable");
+        process.exit(1);
+    }
+
+    try {
+        await mongoose.connect(
+            process.env.DATABASE_CONNECTION_STRING,
+            {
+                dbName: process.env.DATABASE_NAME,
+            }
+        );
+        console.log("Connected to MongoDB");
+        const port = process.env.PORT;
+        app.listen(port, () => {
+            console.log(`[server]: Server is running at http://localhost:${port}`);
+        });
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+}
+
+bootstrap();
