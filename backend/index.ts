@@ -6,15 +6,6 @@ import cors, { CorsOptions } from "cors";
 import { responseFormatter } from "./src/middleware/responseFormatter";
 
 const app: Express = express();
-// if (!process.env.PORT) {
-//     throw new Error("Can not read evironment variable");
-//     process.exit(1);
-// }
-// const port = process.env.PORT;
-
-// let corsOptions: CorsOptions = {
-//     origin: "htt://example.com",
-// };
 
 dotenv.config();
 

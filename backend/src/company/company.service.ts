@@ -22,10 +22,6 @@ export class CompanyService {
             });
     }
 
-    // public async getCompanies() {
-    //     return await this.companyModel.find();
-    // }
-
     public async getCompanyById(_id: string) {
         return await this.companyModel.findById(_id);
     }
